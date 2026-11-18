@@ -2,7 +2,7 @@ import streamlit as st
 from service import processar_mensagem
 
 # Configurar metadados
-st.set_page_config(page_title="Agendamentos", page_icon="📅", layout="wide")
+st.set_page_config(page_title="GPSA - Assistente", page_icon="⚙️", layout="wide")
 
 # Sidebar
 with st.sidebar:

@@ -41,14 +41,14 @@ ENTIDADES = {
     "manutencao": ["ajust", "repar", "manutenç", "manutenc", "intervenç",
                    "intervenca", "consert", "revis", "revisa", "regul"],
 }
- 
+
 INTENCOES = {
     "comprar": ["compr", "vend", "adquir"],
     "consultar": ["consult", "ver", "dispon", "disponibil"],
     "agendar": ["agend", "program", "marc"],
     "cancelar": ["cancel", "anul", "abort", "sust", "revog", "invalid"],
 }
- 
+
 MATRIZ_RESPOSTA = {
     "maquina": {
         "comprar": "Mando o PIX na chave XXX",
@@ -59,10 +59,7 @@ MATRIZ_RESPOSTA = {
         "cancelar": "Agendamento cancelado com sucesso",
     },
 }
- 
-RESPOSTA_PADRAO = "Desculpe, não posso ajudar!"
- 
- 
+
 # ---------------------------------------------------------------------------
 # 3. Funções de processamento
 # ---------------------------------------------------------------------------
@@ -91,16 +88,24 @@ def buscar_no_dicionario(stemmings, dicionario):
     return None
  
  
-def identificar_entidade(stemmings):
-    return buscar_no_dicionario(stemmings, ENTIDADES)
+def identificar_entidade(lista_stemmings):
+    for token in lista_stemmings:
+        for entidade, lista_sinonimos in ENTIDADES.items():
+            if token in lista_sinonimos:
+                return entidade
  
  
-def identificar_intencao(stemmings):
-    return buscar_no_dicionario(stemmings, INTENCOES)
+def identificar_intencao(lista_stemmings):
+    for token in lista_stemmings:
+        for intencao, lista_sinonimos in INTENCOES.items():
+            if token in lista_sinonimos:
+                return intencao
  
  
 def responder(entidade, intencao):
-    return MATRIZ_RESPOSTA.get(entidade, {}).get(intencao, RESPOSTA_PADRAO)
+    if (entidade in MATRIZ_RESPOSTA) and (intencao in MATRIZ_RESPOSTA[entidade]):
+        return MATRIZ_RESPOSTA[entidade][intencao]
+    return "Desculpe, não posso ajudar!"
  
  
 # ---------------------------------------------------------------------------
