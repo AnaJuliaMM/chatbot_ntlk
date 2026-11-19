@@ -27,9 +27,6 @@ def carregar_recursos():
         except LookupError:
             nltk.download(pacote, quiet=True)
  
-    stopwords_ptbr = set(stopwords.words("portuguese"))
-    stemmer = RSLPStemmer()
-    return stopwords_ptbr, stemmer
  
  
 # ---------------------------------------------------------------------------
@@ -65,16 +62,17 @@ MATRIZ_RESPOSTA = {
 # ---------------------------------------------------------------------------
  
 def identificar_tokens(mensagem):
-    return word_tokenize(mensagem.lower(), language="portuguese")
+    mensagem = mensagem.lower
+    return word_tokenize(mensagem, language="portuguese")
  
  
 def remover_stopwords(tokens):
-    stopwords_ptbr, _ = carregar_recursos()
+    stopwords_ptbr = set(stopwords.words("portuguese"))
     return [t for t in tokens if t not in stopwords_ptbr and t.isalpha()]
  
  
 def criar_stemmings(tokens):
-    _, stemmer = carregar_recursos()
+    stemmer = RSLPStemmer()
     return [stemmer.stem(t) for t in tokens]
  
  
@@ -113,6 +111,8 @@ def responder(entidade, intencao):
 # ---------------------------------------------------------------------------
  
 def processar_mensagem(mensagem):
+    carregar_recursos()
+
     tokens = identificar_tokens(mensagem)
     tokens_filtrados = remover_stopwords(tokens)
     stemmings = criar_stemmings(tokens_filtrados)
